@@ -11,7 +11,7 @@
             >Preencha os dados abaixo para prosseguir</v-card-subtitle
           >
           <v-card-text>
-            <v-form>
+            <v-form @submit.prevent="autenticar">
               <v-text-field
                 label="E-mail"
                 type="email"
@@ -26,21 +26,32 @@
                 clearable
                 outlined
               ></v-text-field>
-              <v-btn depressed color="primary"> Acessar </v-btn>
+              <v-btn type="submit" depressed color="primary"> Acessar </v-btn>
             </v-form>
           </v-card-text>
         </v-card>
       </v-container>
     </v-main>
-    <v-footer> </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import { Mutation, Action } from "vuex-class";
+
 @Component
-export default class LoginVue extends Vue {}
+export default class LoginVue extends Vue {
+  @Action
+  private login: any;
+
+  @Action
+  private logout: any;
+
+  autenticar() {
+    this.login({ autenticado: true, payload: "devo guardar o token aqui" });
+  }
+}
 </script>
 
 <style>

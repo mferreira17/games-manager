@@ -1,16 +1,16 @@
 <template>
-  <hello-world />
+  <BuscaComponent />
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
-  import HelloWorld from '../components/HelloWorld.vue'
+  import BuscaComponent from '../components/BuscaComponent.vue'
 
   export default Vue.extend({
     name: 'HomeComponent',
 
     components: {
-      HelloWorld,
+      BuscaComponent,
     },
   })
 </script>
