@@ -51,6 +51,7 @@ export default Vue.extend({
           "https://api.rawg.io/api/games?key="+process.env.VUE_APP_API_KEY+"&search=" +
           this.strPesquisa,
         headers: {
+          "Access-Control-Allow-Origin":"https://games-manager.netlify.app",
           "Access-Control-Request-Headers":
             "accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with, token, referer-trp, referer-referer, x-api-language, x-api-client, x-api-referer",
         },
