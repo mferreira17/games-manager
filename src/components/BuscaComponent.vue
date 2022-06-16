@@ -4,7 +4,7 @@
       <v-card-title>Games Manager</v-card-title>
       <v-card-subtitle>Gerenciador de jogos</v-card-subtitle>
       <v-card-text>
-        <v-form @submit.prevent="buscarJogo">
+        <v-form @submit.prevent="loader=!loader">
           <v-text-field
             type="text"
             placeholder="Informe o nome do jogo para pesquisar"
@@ -12,7 +12,19 @@
             clearable
             outlined
           ></v-text-field>
-          <v-btn type="submit" depressed color="primary"> Buscar </v-btn>
+          <v-btn
+            type="submit"
+            depressed
+            color="primary"
+            :loading="loader"
+            :disabled="loader"
+            @click="buscarJogo"
+          >
+            Buscar
+            <template v-slot:loader>
+              <span>Pesquisando...</span>
+            </template>
+          </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -31,35 +43,44 @@ export default Vue.extend({
   name: "BuscaComponent",
   components: { ListaJogosComponent },
   methods: {
-   async buscarJogo() {
+    async buscarJogo() {
       console.log("procurando por .: " + this.strPesquisa);
       const config = {
         method: "get",
         url:
-          "https://api.rawg.io/api/games?key=&search=" +
+          "https://api.rawg.io/api/games?key="+process.env.VUE_APP_API_KEY+"&search=" +
           this.strPesquisa,
-        headers: {},
+        headers: {
+          "Access-Control-Request-Headers":
+            "accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with, token, referer-trp, referer-referer, x-api-language, x-api-client, x-api-referer",
+        },
       };
       await axios(config).then((response) => {
         const lista = new Array<any>();
 
         response.data.results.forEach((element: any) => {
+          console.log;
           const jogo: IJogo = {
             nome: element.name,
             dataLancamento: element.released,
             imagem: element.background_image,
+            rawgGameId: element.id,
+            plataforma: "",
           };
           lista.push(jogo);
         });
 
         this.results = JSON.parse(JSON.stringify(lista));
         console.log(this.results);
+        this.loader = !this.loader
       });
     },
   },
   data: () => ({
     strPesquisa: "",
     results: new Array<IJogo>(),
+    loader: false,
   }),
+
 });
 </script>
